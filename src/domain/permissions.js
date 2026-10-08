@@ -1,0 +1,1 @@
+export const PERMISSIONS=Object.freeze({DASHBOARD_READ:'dashboard:read'});
