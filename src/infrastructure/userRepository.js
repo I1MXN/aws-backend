@@ -1,0 +1,4 @@
+import{pool}from'./mysql.js';
+export async function findByIdentity(identity){const [rows]=await pool.execute('SELECT u.id,u.nombre,u.usuario,u.correo,u.password_hash,u.activo,r.nombre AS rol FROM usuarios u JOIN roles r ON r.id=u.rol_id WHERE u.usuario=? OR u.correo=? LIMIT 1',[identity,identity]);return rows[0]||null;}
+export async function findById(id){const[rows]=await pool.execute('SELECT u.id,u.nombre,u.usuario,u.correo,u.activo,r.nombre AS rol FROM usuarios u JOIN roles r ON r.id=u.rol_id WHERE u.id=? LIMIT 1',[id]);return rows[0]||null;}
+export async function getPermissions(id){const[rows]=await pool.execute('SELECT DISTINCT p.clave FROM permisos p JOIN rol_permisos rp ON rp.permiso_id=p.id JOIN usuarios u ON u.rol_id=rp.rol_id WHERE u.id=?',[id]);return rows.map(r=>r.clave);}
