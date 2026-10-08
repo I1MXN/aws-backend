@@ -1,0 +1,1 @@
+import{createApp}from'./app.js';import{config}from'./config/env.js';createApp().listen(config.port,'0.0.0.0',()=>console.log(`API en puerto ${config.port}`));
