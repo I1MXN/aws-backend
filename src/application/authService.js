@@ -1,0 +1,4 @@
+import bcrypt from'bcryptjs';import jwt from'jsonwebtoken';import{config}from'../config/env.js';import{findByIdentity}from'../infrastructure/userRepository.js';
+const dummy='$2a$12$k9kM8mpjFZP.hNAF6RxFrOyk9TFM6pmSX9wCxTtIm/J6aOAn6QWGe';
+export async function authenticate(identity,password){const user=await findByIdentity(identity);const valid=await bcrypt.compare(password,user?.password_hash||dummy);if(!user||!user.activo||!valid)return null;return {token:jwt.sign({sub:String(user.id)},config.jwtSecret,{expiresIn:config.jwtExpiry,algorithm:'HS256',issuer:'aws-zero-trust',audience:'aws-dashboard'})};}
+export function verifyToken(token){return jwt.verify(token,config.jwtSecret,{algorithms:['HS256'],issuer:'aws-zero-trust',audience:'aws-dashboard'});}
